@@ -1,0 +1,144 @@
+
+---------------------------------------- Query ---------------------------------------- 
+SELECT last_name, first_name FROM employees where country != 'UK' AND hire_date <= '2019-04-14' ORDER BY last_name ASC;
+										
+
+---------------------------------------- Results ---------------------------------------- 					
+ last_name | first_name 
+-----------+------------
+ Callahan  | Laura
+ Davolio   | Nancy
+ Fuller    | Andrew
+ Leverling | Janet
+ Peacock   | Margaret
+(5 rows)
+										
+
+---------------------------------------- Query ---------------------------------------- 
+SELECT product_id, product_name, unit_price, units_in_stock FROM products WHERE units_in_stock >= 1 AND units_in_stock < reorder_level;
+										
+
+---------------------------------------- Results ---------------------------------------- 					
+ product_id |       product_name        | unit_price | units_in_stock 
+------------+---------------------------+------------+----------------
+          2 | Chang                     |         19 |             17
+          3 | Aniseed Syrup             |         10 |             13
+         11 | Queso Cabrales            |         21 |             22
+         21 | Sir Rodney's Scones       |         10 |              3
+         30 | Nord-Ost Matjeshering     |      25.89 |             10
+         32 | Mascarpone Fabioli        |         32 |              9
+         37 | Gravad lax                |         26 |             11
+         43 | Ipoh Coffee               |         46 |             17
+         45 | Rogede sild               |        9.5 |              5
+         48 | Chocolade                 |      12.75 |             15
+         49 | Maxilaku                  |         20 |             10
+         56 | Gnocchi di nonna Alice    |         38 |             21
+         64 | Wimmers gute Semmelknödel |      33.25 |             22
+         66 | Louisiana Hot Spiced Okra |         17 |              4
+         68 | Scottish Longbreads       |       12.5 |              6
+         70 | Outback Lager             |         15 |             15
+         74 | Longlife Tofu             |         10 |              4
+(17 rows)
+										
+
+---------------------------------------- Query ---------------------------------------- 
+postgres=# SELECT product_name, unit_price FROM products where unit_price = (SELECT MIN(unit_price) FROM products);
+										
+
+---------------------------------------- Results ---------------------------------------- 					
+ product_name | unit_price 
+--------------+------------
+ Geitost      |        2.5
+(1 row)
+										
+
+---------------------------------------- Query ---------------------------------------- 
+SELECT product_id, product_name, (units_in_stock*unit_price) AS total from products WHERE (units_in_stock*unit_price) < 200 ORDER BY total ASC;
+										
+
+---------------------------------------- Results ---------------------------------------- 					
+ product_id |       product_name        |      total       
+------------+---------------------------+------------------
+         29 | Thüringer Rostbratwurst   |                0
+          5 | Chef Anton's Gumbo Mix    |                0
+         53 | Perth Pasties             |                0
+         17 | Alice Mutton              |                0
+         31 | Gorgonzola Telino         |                0
+         21 | Sir Rodney's Scones       |               30
+         74 | Longlife Tofu             |               40
+         45 | Rogede sild               |             47.5
+         66 | Louisiana Hot Spiced Okra |               68
+         68 | Scottish Longbreads       |               75
+         24 | Guaraná Fantástica        |               90
+          3 | Aniseed Syrup             |              130
+         13 | Konbu                     |              144
+         54 | Tourtière                 | 156.449995994568
+         48 | Chocolade                 |           191.25
+(15 rows)
+	
+
+---------------------------------------- Query ---------------------------------------- 
+SELECT ship_country, COUNT(order_id) FROM orders WHERE ship_country != 'USA' AND order_date >= '1996-08-01' AND order_date <= '1996-08-31' GROUP BY ship_country;
+									
+
+---------------------------------------- Results ---------------------------------------- 					
+ ship_country | count 
+--------------+-------
+ Spain        |     2
+ Mexico       |     2
+ Brazil       |     4
+ UK           |     1
+ Italy        |     2
+ Venezuela    |     1
+ Germany      |     6
+ Finland      |     1
+ Sweden       |     2
+ France       |     1
+(10 rows)
+											
+
+---------------------------------------- Query ---------------------------------------- 
+Select customer_id, COUNT(order_id) AS count FROM orders GROUP BY customer_id HAVING (COUNT(order_id)) < 4 ORDER BY customer_id DESC; 
+
+										
+
+---------------------------------------- QResults ---------------------------------------- 					
+ customer_id | count 
+-------------+-------
+ TRAIH       |     3
+ THECR       |     3
+ NORTS       |     3
+ LAZYK       |     2
+ LAUGB       |     3
+ GROSR       |     2
+ FRANR       |     3
+ CONSH       |     3
+ CENTC       |     1
+ BOLID       |     3
+(10 rows)	
+
+---------------------------------------- Query ---------------------------------------- 
+
+SELECT supplier_id, SUM(units_in_stock*unit_price) AS total FROM products GROUP BY supplier_id HAVING COUNT(product_id) >3;
+
+---------------------------------------- Results ---------------------------------------- 					
+ supplier_id |      total       
+-------------+------------------
+           7 | 4409.65005874634
+          12 | 3301.84996032715
+           2 |  2833.7999420166
+           8 | 4276.99999523163
+(4 rows)	
+
+---------------------------------------- Query ---------------------------------------- 
+SELECT last_name, first_name, title_of_courtesy, extension, COUNT(order_id) from employees LEFT JOIN orders ON orders.employee_id = employees.employee_id GROUP BY last_name, first_name, title_of_courtesy, extension HAVING COUNT(order_id) < 75;
+
+---------------------------------------- Results ---------------------------------------- 					
+last_name | first_name | title_of_courtesy | extension | count 
+-----------+------------+-------------------+-----------+-------
+ Dodsworth | Anne       | Ms.               | 452       |    43
+ King      | Robert     | Mr.               | 465       |    72
+ Buchanan  | Steven     | Mr.               | 3453      |    42
+ Suyama    | Michael    | Mr.               | 428       |    67
+(4 rows)
+	
