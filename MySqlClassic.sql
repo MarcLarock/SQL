@@ -216,10 +216,10 @@ ORDER BY
 WITH countrylist AS (
 SELECT country, city, officeCode,
 	CASE
-		WHEN country = 'USA' THEN 'Boring'
-		WHEN country = 'UK' THEN 'Very Boring'
-		WHEN country = 'France' THEN 'GREAT'
-		ELSE 'OK'
+		WHEN country = 'USA' THEN 'Ops'
+		WHEN country = 'UK' THEN 'Accounting'
+		WHEN country = 'France' THEN 'Corporate'
+		ELSE 'NA'
 	END AS Status
 	FROM offices
 	ORDER BY country DESC	
